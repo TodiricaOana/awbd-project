@@ -4,6 +4,8 @@ Project details
 
 Jewelry Online Shop
 
+Business requirements:
+
 1.	An unauthenticated user can create an account and authenticate
 2.	An authenticated user can update information in his profile and can delete his account
 3.	An admin can see/delete registered users
@@ -15,6 +17,8 @@ Jewelry Online Shop
 9.	An authenticated user can see all the reviews, can create and update his reviews about products
 10.	An admin can see all the reviews for products and can delete reviews (if they are unethical)
 11.	An admin can see orders from all users or from a specific user and can update orders
+
+Main features: 
 
 1.	Authentication system
 2.	Management of users and personal information
