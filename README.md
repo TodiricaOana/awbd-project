@@ -31,6 +31,7 @@ Main features:
 For Swagger UI go to this site, while running the application: http://localhost:8080/swagger-ui.html
 
 For Swagger documentation call this url http://localhost:8080/v3/api-docs and it will return:
+
 {
     "openapi": "3.0.1",
     "info": {
