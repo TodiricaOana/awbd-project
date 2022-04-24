@@ -10,6 +10,7 @@ import com.example.javaproject.exception.definition.ReviewNotFound;
 import com.example.javaproject.mapper.ProductMapper;
 import com.example.javaproject.mapper.ReviewMapper;
 import com.example.javaproject.model.*;
+import com.example.javaproject.model.security.User;
 import com.example.javaproject.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

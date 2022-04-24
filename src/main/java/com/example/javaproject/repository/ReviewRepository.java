@@ -1,6 +1,5 @@
 package com.example.javaproject.repository;
 
-import com.example.javaproject.model.Order;
 import com.example.javaproject.model.Review;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,4 +14,5 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     @Query("select r from Review r join r.product p where p.id = :productId")
     List<Review> findReviewsByProductId(Long productId);
+    
 }

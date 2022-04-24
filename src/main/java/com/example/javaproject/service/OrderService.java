@@ -1,18 +1,14 @@
 package com.example.javaproject.service;
 
-import com.example.javaproject.dto.CartDto;
 import com.example.javaproject.dto.OrderDto;
-import com.example.javaproject.dto.ProductDto;
 import com.example.javaproject.exception.definition.CartNotFound;
 import com.example.javaproject.exception.definition.OrderNotFound;
 import com.example.javaproject.exception.definition.OutOfStock;
 import com.example.javaproject.exception.definition.ProductNotFound;
-import com.example.javaproject.mapper.CartMapper;
 import com.example.javaproject.mapper.OrderMapper;
 import com.example.javaproject.mapper.ProductMapper;
-import com.example.javaproject.mapper.UserMapper;
 import com.example.javaproject.model.*;
-import com.example.javaproject.repository.CartRepository;
+import com.example.javaproject.model.security.User;
 import com.example.javaproject.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -67,15 +63,16 @@ public class OrderService {
         return orderMapper.mapToDto(order.get());
     }
 
-    @Transactional
     public void deleteOrderById(Long orderId) throws OrderNotFound {
         Order order = findById(orderId);
         orderRepository.delete(order);
     }
 
-    @Transactional
     public OrderDto placeOrder(Long userId) throws CartNotFound, ProductNotFound, OutOfStock {
         User user = userService.findById(userId);
+        if(user.getCart() == null) {
+            throw new CartNotFound("Cart not found");
+        }
         Cart cart = cartService.findById(user.getCart().getId());
         Order order = createOrder(user, cart);
         List <Product> products = cart.getProducts();

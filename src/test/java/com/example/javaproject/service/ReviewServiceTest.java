@@ -6,7 +6,7 @@ import com.example.javaproject.exception.definition.ReviewNotFound;
 import com.example.javaproject.mapper.ReviewMapper;
 import com.example.javaproject.model.Product;
 import com.example.javaproject.model.Review;
-import com.example.javaproject.model.User;
+import com.example.javaproject.model.security.User;
 import com.example.javaproject.repository.ReviewRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

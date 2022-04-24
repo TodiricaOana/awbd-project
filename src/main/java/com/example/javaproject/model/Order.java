@@ -1,4 +1,5 @@
 package com.example.javaproject.model;
+import com.example.javaproject.model.security.User;
 
 import lombok.Data;
 import org.hibernate.annotations.OnDelete;

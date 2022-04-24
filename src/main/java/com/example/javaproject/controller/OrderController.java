@@ -24,7 +24,7 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    @PostMapping("/add/{userId}")
+    @PostMapping("/{userId}")
     public ResponseEntity<OrderDto> placeOrder(@PathVariable Long userId) throws CartNotFound, ProductNotFound, OutOfStock {
         return ResponseEntity
                 .ok()
@@ -45,7 +45,7 @@ public class OrderController {
                 .body(orderService.findOrderById(orderId));
     }
 
-    @DeleteMapping("/delete/{orderId}")
+    @DeleteMapping("/{orderId}")
     public ResponseEntity<CartDto> deleteOrder(@PathVariable Long orderId) throws OrderNotFound {
         orderService.deleteOrderById(orderId);
         return ResponseEntity.noContent().build();
@@ -58,7 +58,7 @@ public class OrderController {
                 .body(orderService.getAllOrders());
     }
 
-    @PutMapping("/update/{id}/{status}")
+    @PutMapping("/{id}/{status}")
     public ResponseEntity<OrderDto> updateOrder(@PathVariable Long id, @PathVariable String status) throws OrderNotFound {
         return ResponseEntity
                 .ok()

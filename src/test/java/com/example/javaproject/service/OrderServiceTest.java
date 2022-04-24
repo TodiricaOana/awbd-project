@@ -6,6 +6,7 @@ import com.example.javaproject.exception.definition.*;
 import com.example.javaproject.mapper.OrderMapper;
 import com.example.javaproject.mapper.ProductMapper;
 import com.example.javaproject.model.*;
+import com.example.javaproject.model.security.User;
 import com.example.javaproject.repository.OrderRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

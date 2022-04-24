@@ -121,21 +121,6 @@ class ProductControllerTest {
                 .andExpect(jsonPath("$[0].numberOfProducts", is(dto.get(0).getNumberOfProducts())));
     }
 
-    @Test
-    @DisplayName("Testing get all products by type")
-    void test_getByType() throws Exception {
-        List<ProductDto> dto = List.of(getProductDto());
-        ProductType productType = ProductType.RING;
-        when(productService.getProductsByType(productType)).thenReturn(dto);
-
-        mockMvc.perform(get("/api/product/get/" + productType))
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$[0].name", is(dto.get(0).getName())))
-                .andExpect(jsonPath("$[0].price", is(dto.get(0).getPrice())))
-                .andExpect(jsonPath("$[0].numberOfProducts", is(dto.get(0).getNumberOfProducts())));
-    }
-
     private ProductDto getProductDto() {
         return ProductDto.builder()
                 .name(NAME)

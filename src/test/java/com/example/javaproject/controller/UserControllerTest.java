@@ -50,7 +50,7 @@ class UserControllerTest {
     void test_register() throws Exception {
         //Arrange
         UserDto dto = getUserDto();
-        when(userService.createUser(any(), any())).thenReturn(dto);
+        when(userService.createUser(any())).thenReturn(dto);
 
         //Act
         MvcResult result = mockMvc.perform(post("/api/user/register")
@@ -87,7 +87,7 @@ class UserControllerTest {
         //Arrange
         UserDto dto = getUserDto();
         Long id = 1L;
-        when(userService.updateUser(any(), any(), any())).thenReturn(dto);
+        when(userService.updateUser(any(), any())).thenReturn(dto);
 
         //Act
         MvcResult result = mockMvc.perform(put("/api/user/update/" + id)

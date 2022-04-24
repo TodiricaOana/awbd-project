@@ -4,9 +4,8 @@ import com.example.javaproject.dto.UserDto;
 import com.example.javaproject.exception.definition.EmailAlreadyUsedException;
 import com.example.javaproject.exception.definition.UserNotFoundException;
 import com.example.javaproject.mapper.UserMapper;
-import com.example.javaproject.model.User;
-import com.example.javaproject.model.UserType;
-import com.example.javaproject.repository.UserRepository;
+import com.example.javaproject.model.security.User;
+import com.example.javaproject.repository.security.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -65,9 +64,8 @@ public class UserService {
         return hashtext;
     }
 
-    public UserDto createUser(UserDto userDto, UserType type) throws EmailAlreadyUsedException, NoSuchAlgorithmException {
+    public UserDto createUser(UserDto userDto) throws EmailAlreadyUsedException, NoSuchAlgorithmException {
         User user = userMapper.mapToEntity(userDto);
-        user.setUserType(type);
 
         if (checkIfEmailExists(user.getEmail())) {
             throw new EmailAlreadyUsedException("This email is already used");
@@ -86,10 +84,9 @@ public class UserService {
         return usersDTO;
     }
 
-    public UserDto updateUser(User user, Long id,  UserType type) throws NoSuchAlgorithmException {
+    public UserDto updateUser(User user, Long id) throws NoSuchAlgorithmException {
         findUserById(id);
         user.setId(id);
-        user.setUserType(type);
         user.setPassword(encrypt(user.getPassword()));
         return userMapper.mapToDto(userRepository.save(user));
     }

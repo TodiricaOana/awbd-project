@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product details</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css"/>
+    <script src="/webjars/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <style>
+
+    </style>
+</head>
+<body>
+<div class="container center" style="margin-top: 20px">
+    <div class="row" style="padding-left: 15px">
+        <a class="btn btn-primary" role="button" th:href="@{'/cart/'}">
+            My cart
+        </a>
+    </div>
+    <div class="row" style="justify-content: center; margin-top: 10px;">
+        <div class="col-md-8 col-md-offset-3">
+            <div class="panel-group">
+                <div class="panel panel-primary"  style="border-width: 1px; border-style: solid; border-color: rgb(127,130,131);">
+                    <div class="panel-heading"  style="background-color:rgba(56,54,87,0.75); padding: 3px;">
+                        <h1 class="panel-title text-center" style="color:white" >Product</h1>
+                    </div>
+                    <div class="panel-body" style="padding-left: 20px; padding-top: 20px">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <strong>Product name:</strong>
+                            </div>
+                            <div class="col-md-6 float-right">
+                                <p th:text="${product.name}"></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <strong>Product type:</strong>
+                            </div>
+                            <div class="col-md-6 float-right">
+                                <p th:text="${product.productType}"></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <strong>Price:</strong>
+                            </div>
+                            <div class="col-md-6 float-right">
+                                <p th:text="${product.price}"></p>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <strong>Number of products available:</strong>
+                            </div>
+                            <div class="col-md-6 float-right">
+                                <p th:text="${product.numberOfProducts}"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container" style="padding-top: 15px;">
+        <div class="row" style="justify-content: center">
+            <a class="btn btn-secondary" role="button" th:href="@{'/products/form/' + ${product.id}}">Update product</a>
+            <form th:action="@{'/products/' + ${product.id}}" th:method="DELETE" style="margin-left: 10px;">
+                <button class="btn btn-danger" type="submit">Delete product</button>
+            </form>
+            <form th:action="@{'/cart/' + ${product.id}}" th:method="DELETE" style="margin-left: 10px;">
+                <button class="btn btn-success" type="submit">Add to cart</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,11 +1,9 @@
 package com.example.javaproject.dto;
 
 import com.example.javaproject.model.ProductType;
-import com.example.javaproject.model.UserType;
 import lombok.Builder;
 import lombok.Data;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 

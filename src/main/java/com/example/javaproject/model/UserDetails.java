@@ -1,12 +1,17 @@
 package com.example.javaproject.model;
 
+import com.example.javaproject.model.security.User;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-@Data
+@Setter
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "user_details")
 public class UserDetails {
     @Id

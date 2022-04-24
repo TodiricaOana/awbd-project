@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Products</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css"/>
+    <script src="/webjars/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <style>
+        .container {
+            padding-top: 10px;
+        }
+        .padding {
+            padding-bottom: 10px;
+            padding-top: 10px;
+        }
+        .btn {
+            margin-right: 20px;
+        }
+        .info {
+            width: 5%;
+        }
+    </style>
+</head>
+<body>
+Logged user: <span sec:authentication="name">user </span> Roles: <span sec:authentication="principal.authorities">[ROLE_USER]</span>
+<div class="container">
+    <div class="row" style="padding-left: 15px">
+        <a class="btn btn-primary" role="button" th:href="@{'/cart/'}">
+            My cart
+        </a>
+    </div>
+    <div class="title padding">
+        <h2 class="text-center">List of products</h2>
+    </div>
+    <div class="row padding float-right">
+        <a class="btn btn-primary" role="button" th:href="@{'/products/form/'}">
+          Add product
+        </a>
+    </div>
+    <table class="table table-hover table-bordered">
+        <thead class="thead-inverse">
+        <tr>
+            <th class="header" scope="col">ID</th>
+            <th class="header" scope="col">Type</th>
+            <th class="header" scope="col">Car type</th>
+            <th class="header" scope="col">Price</th>
+            <th class="header info" scope="col"></th>
+        </tr>
+        </thead>
+        <tr th:each="product, stat : ${products}">
+            <td th:text="${product.name}"></td>
+            <td th:text="${product.price}"></td>
+            <td th:text="${product.numberOfProducts}"></td>
+            <td th:text="${product.productType}"></td>
+            <td><a th:href="@{'/products/' + ${product.id}}">Info</a></td>
+        </tr>
+    </table>
+</div>
+<div class="col-md-3">
+    <form th:action="@{/logout}" method="POST"> <input type="submit" class="btn btn-primary" value="Logout"> </form>
+</div>
+</body>
+</html>

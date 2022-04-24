@@ -7,6 +7,7 @@ import com.example.javaproject.exception.definition.ProductNotFound;
 import com.example.javaproject.exception.definition.ReviewNotFound;
 import com.example.javaproject.mapper.CartMapper;
 import com.example.javaproject.model.*;
+import com.example.javaproject.model.security.User;
 import com.example.javaproject.repository.CartRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -69,7 +70,7 @@ class CartServiceTest {
         when(productService.findById(PRODUCT_ID)).thenReturn(product);
         when(cartRepository.save(any(Cart.class))).thenReturn(savedCart);
         when(cartMapper.mapToDto(savedCart)).thenReturn(returnedCartDto);
-        when(userService.updateUser(user, USER_ID, UserType.USER)).thenReturn(userUpdated);
+        when(userService.updateUser(user, USER_ID)).thenReturn(userUpdated);
 
         CartDto result = cartService.addToCart(USER_ID, PRODUCT_ID);
 

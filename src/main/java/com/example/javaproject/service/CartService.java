@@ -6,8 +6,7 @@ import com.example.javaproject.exception.definition.ProductNotFound;
 import com.example.javaproject.mapper.CartMapper;
 import com.example.javaproject.model.Cart;
 import com.example.javaproject.model.Product;
-import com.example.javaproject.model.User;
-import com.example.javaproject.model.UserType;
+import com.example.javaproject.model.security.User;
 import com.example.javaproject.repository.CartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,7 +46,6 @@ public class CartService {
         return cart.get();
     }
 
-    @Transactional
     public void deleteCartByUserId(Long userId) throws CartNotFound {
         User user = userService.findById(userId);
         Cart cart = findById(user.getCart().getId());
@@ -71,7 +69,7 @@ public class CartService {
         cart.getProducts().add(product);
         Cart savedCart = cartRepository.save(cart);
 
-        userService.updateUser(user, userId, UserType.USER);
+        userService.updateUser(user, userId);
         return cartMapper.mapToDto(savedCart);
     }
 

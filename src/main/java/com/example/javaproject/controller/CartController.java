@@ -19,7 +19,7 @@ public class CartController {
     @Autowired
     private CartService cartService;
 
-    @PostMapping("/add/{userId}/{productId}")
+    @PostMapping("/{userId}/{productId}")
     public ResponseEntity<CartDto> addToCart(@PathVariable Long userId, @PathVariable Long productId) throws ProductNotFound, NoSuchAlgorithmException {
         return ResponseEntity
                 .ok()
@@ -33,14 +33,14 @@ public class CartController {
                 .body(cartService.findCartByUser(userId));
     }
 
-    @PutMapping("/delete/{cartId}/{productId}")
+    @PutMapping("/{cartId}/{productId}")
     public ResponseEntity<CartDto> deleteProductFromCart(@PathVariable Long cartId, @PathVariable Long productId) throws ProductNotFound, CartNotFound {
         return ResponseEntity
                 .ok()
                 .body(cartService.deleteProductFromCart(cartId, productId));
     }
 
-    @DeleteMapping("/delete/{userId}")
+    @DeleteMapping("/{userId}")
     public ResponseEntity<CartDto> deleteCartByUserId(@PathVariable Long userId) throws CartNotFound {
         cartService.deleteCartByUserId(userId);
         return ResponseEntity.noContent().build();

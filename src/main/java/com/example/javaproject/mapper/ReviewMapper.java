@@ -1,9 +1,7 @@
 package com.example.javaproject.mapper;
 
 import com.example.javaproject.dto.ReviewDto;
-import com.example.javaproject.dto.UserDto;
 import com.example.javaproject.model.Review;
-import com.example.javaproject.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

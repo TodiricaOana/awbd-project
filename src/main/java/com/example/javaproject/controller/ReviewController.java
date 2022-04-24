@@ -26,27 +26,27 @@ public class ReviewController {
     @Autowired
     private ReviewMapper reviewMapper;
 
-    @PostMapping("/add")
+    @PostMapping()
     public ResponseEntity<ReviewDto> addReview(@Valid @RequestBody ReviewDto reviewDto) throws ProductNotFound {
         return ResponseEntity
                 .ok()
                 .body(reviewService.addReview(reviewDto));
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<ReviewDto> updateReview(@Valid @RequestBody ReviewDto reviewDto, @PathVariable Long id) throws ReviewNotFound {
         return ResponseEntity
                 .ok()
                 .body(reviewService.updateReview(reviewDto, id));
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<ReviewDto> delete(@PathVariable Long id) throws ReviewNotFound {
         reviewService.deleteReviewById(id);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/get/{productId}")
+    @GetMapping("/{productId}")
     public ResponseEntity<List<ReviewDto>> getByProductType(@PathVariable Long productId) throws ReviewNotFound {
         return ResponseEntity
                 .ok()

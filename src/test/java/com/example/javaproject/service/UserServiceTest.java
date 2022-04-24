@@ -4,9 +4,8 @@ import com.example.javaproject.dto.UserDto;
 import com.example.javaproject.exception.definition.EmailAlreadyUsedException;
 import com.example.javaproject.exception.definition.UserNotFoundException;
 import com.example.javaproject.mapper.UserMapper;
-import com.example.javaproject.model.User;
-import com.example.javaproject.model.UserType;
-import com.example.javaproject.repository.UserRepository;
+import com.example.javaproject.model.security.User;
+import com.example.javaproject.repository.security.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -53,7 +52,7 @@ class UserServiceTest {
         when(userMapper.mapToDto(savedUser)).thenReturn(returnedUserDto);
         when(userRepository.findUserByEmail(EMAIL)).thenReturn(null);
 
-        UserDto result = userService.createUser(userDto, UserType.USER);
+        UserDto result = userService.createUser(userDto);
 
         assertNotNull(result);
         assertEquals(returnedUserDto.getEmail(), result.getEmail());
@@ -70,7 +69,7 @@ class UserServiceTest {
         when(userMapper.mapToEntity(userDto)).thenReturn(user);
         when(userRepository.findUserByEmail(EMAIL)).thenReturn(new User());
 
-        assertThrows(EmailAlreadyUsedException.class, () -> userService.createUser(userDto, UserType.USER));
+        assertThrows(EmailAlreadyUsedException.class, () -> userService.createUser(userDto));
     }
 
     @Test
@@ -93,7 +92,7 @@ class UserServiceTest {
         when(userRepository.save(user)).thenReturn(savedUser);
         when(userMapper.mapToDto(savedUser)).thenReturn(returnedUserDto);
 
-        UserDto result = userService.updateUser(user, ID, UserType.USER);
+        UserDto result = userService.updateUser(user, ID);
 
         assertNotNull(result);
         assertEquals(returnedUserDto.getEmail(), result.getEmail());
@@ -107,7 +106,7 @@ class UserServiceTest {
 
         when(userRepository.findById(ID)).thenReturn(Optional.empty());
 
-        assertThrows(UserNotFoundException.class, () -> userService.updateUser(user, ID,UserType.USER));
+        assertThrows(UserNotFoundException.class, () -> userService.updateUser(user, ID));
     }
 
     @Test

@@ -1,13 +1,10 @@
 package com.example.javaproject.service;
 
 import com.example.javaproject.dto.ProductDto;
-import com.example.javaproject.dto.UserDto;
 import com.example.javaproject.exception.definition.*;
 import com.example.javaproject.mapper.ProductMapper;
-import com.example.javaproject.mapper.UserMapper;
 import com.example.javaproject.model.*;
 import com.example.javaproject.repository.ProductRepository;
-import com.example.javaproject.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,13 +50,6 @@ public class ProductService {
 
     public List<ProductDto> getAllProducts() {
         List<Product> products = productRepository.findAll();
-        List <ProductDto> productsDto = products.stream().map(product -> productMapper.mapToDto(product))
-                .collect(Collectors.toList());
-        return productsDto;
-    }
-
-    public List<ProductDto> getProductsByType(ProductType productType) {
-        List<Product> products = productRepository.filter(productType);
         List <ProductDto> productsDto = products.stream().map(product -> productMapper.mapToDto(product))
                 .collect(Collectors.toList());
         return productsDto;

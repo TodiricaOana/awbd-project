@@ -1,8 +1,6 @@
 package com.example.javaproject.mapper;
 
-import com.example.javaproject.dto.CartDto;
 import com.example.javaproject.dto.OrderDto;
-import com.example.javaproject.model.Cart;
 import com.example.javaproject.model.Order;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

@@ -2,8 +2,8 @@ package com.example.javaproject.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import com.example.javaproject.model.User;
 import com.example.javaproject.dto.UserDto;
+import com.example.javaproject.model.security.User;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {

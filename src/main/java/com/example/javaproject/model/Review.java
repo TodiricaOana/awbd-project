@@ -1,13 +1,12 @@
 package com.example.javaproject.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.example.javaproject.model.security.User;
+
 import lombok.Data;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Data
