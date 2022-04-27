@@ -14,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,14 +35,14 @@ class ReviewServiceTest {
     @Mock
     private ReviewRepository reviewRepository;
 
+    @InjectMocks
+    private ReviewService reviewService;
+
     @Mock
     private UserService userService;
 
     @Mock
     private ProductService productService;
-
-    @InjectMocks
-    private ReviewService reviewService;
 
     @Test
     @DisplayName("Create review - works")
@@ -64,44 +65,6 @@ class ReviewServiceTest {
         assertNotNull(result);
         assertEquals(returnedReviewDto.getText(), result.getText());
         assertEquals(returnedReviewDto.getId(), result.getId());
-    }
-
-    @Test
-    @DisplayName("Update review - works")
-    void update_works() throws ReviewNotFound {
-        Review review = getReview();
-        review.setId(ID);
-        ReviewDto reviewDto = getReviewDto();
-
-        Review reviewFind = getReview();
-        reviewFind.setId(ID);
-        Optional<Review> optionalReview = Optional.of(reviewFind);
-
-        Review savedReview = getReview();
-        savedReview.setId(ID);
-
-        ReviewDto returnedReviewDTO = getReviewDto();
-        returnedReviewDTO.setId(ID);
-
-        when(reviewRepository.findById(ID)).thenReturn(optionalReview);
-        when(reviewRepository.save(review)).thenReturn(savedReview);
-        when(reviewMapper.mapToDto(savedReview)).thenReturn(returnedReviewDTO);
-
-        ReviewDto result = reviewService.updateReview(reviewDto, ID);
-
-        assertNotNull(result);
-        assertEquals(returnedReviewDTO.getText(), result.getText());
-        assertEquals(returnedReviewDTO.getId(), result.getId());
-    }
-
-    @Test
-    @DisplayName("update review - fails")
-    void update_reviewNotFound_fails() {
-        ReviewDto reviewDto = getReviewDto();
-
-        when(reviewRepository.findById(ID)).thenReturn(Optional.empty());
-
-        assertThrows(ReviewNotFound.class, () -> reviewService.updateReview(reviewDto, ID));
     }
 
     @Test

@@ -17,14 +17,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 @Profile("mysql")
 public class SecurityJdbcConfig extends WebSecurityConfigurerAdapter {
-
-    @Autowired
-    JpaUserDetailsService userDetailsService;
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+    @Autowired
+    JpaUserDetailsService userDetailsService;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -34,11 +33,29 @@ public class SecurityJdbcConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers(HttpMethod.GET,"/products").hasAnyRole("GUEST", "ADMIN")
-                .antMatchers(HttpMethod.GET,"/products/*").hasAnyRole( "ADMIN")
-                .antMatchers( HttpMethod.PUT, "/products/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.POST, "/products/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.DELETE, "/products/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET,"/products", "/products/*").hasAnyRole("GUEST", "ADMIN")
+                .antMatchers(HttpMethod.PUT, "/products/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/products").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/products/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/products/delete/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/products/form/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/users").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET,"/users/form").permitAll()
+                .antMatchers(HttpMethod.GET,"/users/*", "/users/form/*").hasAnyRole("GUEST", "ADMIN")
+                .antMatchers(HttpMethod.GET,"/users/current").hasAnyRole("GUEST", "ADMIN")
+                .antMatchers(HttpMethod.DELETE,"/users/delete/**").hasAnyRole( "GUEST", "ADMIN")
+                .antMatchers(HttpMethod.PUT,"/users/*").hasAnyRole( "GUEST", "ADMIN")
+                .antMatchers(HttpMethod.POST,"/cart/*").hasAnyRole( "GUEST")
+                .antMatchers(HttpMethod.PUT,"/cart/**").hasAnyRole( "GUEST")
+                .antMatchers(HttpMethod.GET,"/cart").hasAnyRole( "GUEST")
+                .antMatchers(HttpMethod.POST,"/orders").hasAnyRole( "GUEST")
+                .antMatchers(HttpMethod.GET,"/orders/**").hasAnyRole( "ADMIN")
+                .antMatchers(HttpMethod.PUT,"/orders/*").hasAnyRole( "ADMIN")
+                .antMatchers(HttpMethod.DELETE,"/orders/delete/*").hasAnyRole( "ADMIN")
+                .antMatchers(HttpMethod.POST,"/reviews").hasAnyRole( "GUEST")
+                .antMatchers(HttpMethod.GET,"/reviews/form/*").hasAnyRole( "GUEST")
+                .antMatchers(HttpMethod.GET,"/reviews/*").hasAnyRole( "GUEST", "ADMIN")
+                .antMatchers(HttpMethod.DELETE,"/reviews/*").hasAnyRole("ADMIN")
                 .and()
                 .formLogin().loginPage("/login-form")
                 .loginProcessingUrl("/auth")

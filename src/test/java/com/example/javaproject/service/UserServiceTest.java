@@ -4,17 +4,21 @@ import com.example.javaproject.dto.UserDto;
 import com.example.javaproject.exception.definition.EmailAlreadyUsedException;
 import com.example.javaproject.exception.definition.UserNotFoundException;
 import com.example.javaproject.mapper.UserMapper;
+import com.example.javaproject.model.security.Authority;
 import com.example.javaproject.model.security.User;
+import com.example.javaproject.repository.security.AuthorityRepository;
 import com.example.javaproject.repository.security.UserRepository;
+import com.example.javaproject.service.security.JpaUserDetailsService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.security.NoSuchAlgorithmException;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -24,6 +28,7 @@ class UserServiceTest {
 
     private static final Long ID = 1L;
     private static final String EMAIL = "dummy@gmail.com";
+    private static final String ROLE = "ROLE_GUEST";
 
     @Mock
     private UserMapper userMapper;
@@ -31,15 +36,29 @@ class UserServiceTest {
     @Mock
     private UserRepository userRepository;
 
+    @Mock
+    private AuthorityRepository authorityRepository;
+
+    @Mock
+    private PasswordEncoder passwordEncoder;
+
+    @Mock
+    private JpaUserDetailsService jpaUserDetailsService;
+
     @InjectMocks
     private UserService userService;
 
     @Test
     @DisplayName("Create user - works")
-    void create_works() throws EmailAlreadyUsedException, NoSuchAlgorithmException {
+    void create_works() throws EmailAlreadyUsedException {
         UserDto userDto = getUserDto();
+        userDto.setPassword(passwordEncoder.encode("password"));
+
+        Authority authority = getAuthority();
+
         User user = getUser();
-        user.setPassword("password");
+        user.setPassword(passwordEncoder.encode("password"));
+        user.setAuthorities(Collections.singleton(authority));
 
         User savedUser = getUser();
         savedUser.setId(ID);
@@ -51,6 +70,7 @@ class UserServiceTest {
         when(userRepository.save(user)).thenReturn(savedUser);
         when(userMapper.mapToDto(savedUser)).thenReturn(returnedUserDto);
         when(userRepository.findUserByEmail(EMAIL)).thenReturn(null);
+        when(authorityRepository.findByRole(ROLE)).thenReturn(authority);
 
         UserDto result = userService.createUser(userDto);
 
@@ -74,19 +94,22 @@ class UserServiceTest {
 
     @Test
     @DisplayName("Update user - works")
-    void update_works() throws NoSuchAlgorithmException {
+    void update_works() {
         User user = getUser();
-        user.setPassword("password");
+        user.setPassword(passwordEncoder.encode("password"));
 
         User userFind = getUser();
         userFind.setId(ID);
+        userFind.setPassword(passwordEncoder.encode("password"));
         Optional<User> optionalUser = Optional.of(userFind);
 
         User savedUser = getUser();
         savedUser.setId(ID);
+        savedUser.setPassword(passwordEncoder.encode("password"));
 
         UserDto returnedUserDto = getUserDto();
         returnedUserDto.setId(ID);
+        returnedUserDto.setPassword(passwordEncoder.encode("password"));
 
         when(userRepository.findById(ID)).thenReturn(optionalUser);
         when(userRepository.save(user)).thenReturn(savedUser);
@@ -116,7 +139,11 @@ class UserServiceTest {
         user.setId(ID);
         Optional<User> optionalUser = Optional.of(user);
 
+        org.springframework.security.core.userdetails.User userDetails = new org.springframework.security.core.userdetails.User(
+                        EMAIL, "password", new HashSet<>());
+
         when(userRepository.findById(ID)).thenReturn(optionalUser);
+        when(jpaUserDetailsService.getCurrentUser()).thenReturn(userDetails);
 
         userService.deleteUserById(ID);
 
@@ -142,5 +169,12 @@ class UserServiceTest {
         user.setEmail(EMAIL);
 
         return user;
+    }
+
+    private Authority getAuthority() {
+        Authority authority = new Authority();
+        authority.setRole(ROLE);
+
+        return authority;
     }
 }

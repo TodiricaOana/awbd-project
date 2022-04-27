@@ -80,21 +80,6 @@ class CartServiceTest {
     }
 
     @Test
-    @DisplayName("Get all - works")
-    void getAll_works() throws ReviewNotFound {
-        List<Cart> carts = List.of(getCart());
-        List<CartDto> cartDtos = List.of(getCartDto());
-
-        when(cartRepository.findAll()).thenReturn(carts);
-        when(cartMapper.mapToDto(carts.get(0))).thenReturn(cartDtos.get(0));
-
-        List<CartDto> result = cartService.getAllCarts();
-
-        assertNotNull(result);
-        assertEquals(result.get(0).getId(), cartDtos.get(0).getId());
-    }
-
-    @Test
     @DisplayName("delete cart by user id- works")
     void deleteByUserId_works() throws CartNotFound {
         Cart cart = getCart();

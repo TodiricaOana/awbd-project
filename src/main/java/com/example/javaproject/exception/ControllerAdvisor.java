@@ -1,79 +1,113 @@
 package com.example.javaproject.exception;
 
 import com.example.javaproject.exception.definition.*;
-import com.example.javaproject.util.Util;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.ModelAndView;
+import lombok.extern.slf4j.Slf4j;
 
-import java.util.HashMap;
-import java.util.Map;
 
 @ControllerAdvice
+@Slf4j
 public class ControllerAdvisor {
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Object> handleValidationExceptions(
-            MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
-        });
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(CartNotFound.class)
+    public ModelAndView handleCartNotFoundException(CartNotFound exception) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.getModel().put("exception", exception);
+        modelAndView.setViewName("customError");
+
+        log.info(exception.getMessage(), exception);
+        return modelAndView;
     }
 
     @ExceptionHandler(FailedToParseTheBodyException.class)
-    public ResponseEntity<Object> handleFailedToParseTheBodyException(FailedToParseTheBodyException ex) {
-        return new ResponseEntity<>(Util.generateErrorBody(ex.getMessage()), HttpStatus.BAD_REQUEST);
+    public ModelAndView handleFailedToParseTheBodyException(FailedToParseTheBodyException exception) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.getModel().put("exception", exception);
+        modelAndView.setViewName("customError");
+
+        log.info(exception.getMessage(), exception);
+        return modelAndView;
     }
 
     @ExceptionHandler(EmailAlreadyUsedException.class)
-    public ResponseEntity<Object> handleEmailAlreadyUsedException(EmailAlreadyUsedException ex) {
-        return new ResponseEntity<>(Util.generateErrorBody(ex.getMessage()), HttpStatus.CONFLICT);
+    public ModelAndView handleEmailAlreadyUsedException(EmailAlreadyUsedException exception) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.getModel().put("exception", exception);
+        modelAndView.setViewName("customError");
+
+        log.info(exception.getMessage(), exception);
+        return modelAndView;
     }
 
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException ex) {
-        return new ResponseEntity<>(Util.generateErrorBody(ex.getMessage()), HttpStatus.NOT_FOUND);
+    public ModelAndView handleUserNotFoundException(UserNotFoundException exception) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.getModel().put("exception", exception);
+        modelAndView.setViewName("customError");
+
+        log.info(exception.getMessage(), exception);
+        return modelAndView;
     }
 
     @ExceptionHandler(NotMatchingPassword.class)
-    public ResponseEntity<Object> handleNotMatchingPasswordException(NotMatchingPassword ex) {
-        return new ResponseEntity<>(Util.generateErrorBody(ex.getMessage()), HttpStatus.CONFLICT);
+    public ModelAndView handleNotMatchingPasswordException(NotMatchingPassword exception) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.getModel().put("exception", exception);
+        modelAndView.setViewName("customError");
+
+        log.info(exception.getMessage(), exception);
+        return modelAndView;
     }
 
     @ExceptionHandler(InternalServerErrorException.class)
-    public ResponseEntity<Object> handleInternalServerErrorException(InternalServerErrorException ex) {
-        return new ResponseEntity<>(Util.generateErrorBody(ex.getMessage()), HttpStatus.CONFLICT);
+    public ModelAndView handleInternalServerErrorException(InternalServerErrorException exception) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.getModel().put("exception", exception);
+        modelAndView.setViewName("customError");
+
+        log.info(exception.getMessage(), exception);
+        return modelAndView;
     }
 
     @ExceptionHandler(OrderNotFound.class)
-    public ResponseEntity<Object> handleCategoryNotFoundException(OrderNotFound ex) {
-        return new ResponseEntity<>(Util.generateErrorBody(ex.getMessage()), HttpStatus.NOT_FOUND);
+    public ModelAndView handleOrderNotFoundException(OrderNotFound exception) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.getModel().put("exception", exception);
+        modelAndView.setViewName("customError");
+
+        log.info(exception.getMessage(), exception);
+        return modelAndView;
     }
 
     @ExceptionHandler(ProductNotFound.class)
-    public ResponseEntity<Object> handlePostNotFoundException(ProductNotFound ex) {
-        return new ResponseEntity<>(Util.generateErrorBody(ex.getMessage()), HttpStatus.NOT_FOUND);
-    }
+    public ModelAndView handleProductNotFoundException(ProductNotFound exception) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.getModel().put("exception", exception);
+        modelAndView.setViewName("customError");
 
-    @ExceptionHandler(CartNotFound.class)
-    public ResponseEntity<Object> handleCommentNotFoundException(CartNotFound ex) {
-        return new ResponseEntity<>(Util.generateErrorBody(ex.getMessage()), HttpStatus.NOT_FOUND);
+        log.info(exception.getMessage(), exception);
+        return modelAndView;
     }
 
     @ExceptionHandler(OutOfStock.class)
-    public ResponseEntity<Object> handleMessageNotFoundException(OutOfStock ex) {
-        return new ResponseEntity<>(Util.generateErrorBody(ex.getMessage()), HttpStatus.NOT_FOUND);
+    public ModelAndView handleOutOfStockException(OutOfStock exception) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.getModel().put("exception", exception);
+        modelAndView.setViewName("customError");
+
+        log.info(exception.getMessage(), exception);
+        return modelAndView;
     }
 
     @ExceptionHandler(ReviewNotFound.class)
-    public ResponseEntity<Object> handleMessageNotFoundException(ReviewNotFound ex) {
-        return new ResponseEntity<>(Util.generateErrorBody(ex.getMessage()), HttpStatus.NOT_FOUND);
+    public ModelAndView handleReviewNotFoundException(ReviewNotFound exception) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.getModel().put("exception", exception);
+        modelAndView.setViewName("customError");
+
+        log.info(exception.getMessage(), exception);
+        return modelAndView;
     }
 }

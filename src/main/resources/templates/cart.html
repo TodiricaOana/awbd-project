@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Products</title>
+    <title>Cart</title>
     <link rel="stylesheet" href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css"/>
     <script src="/webjars/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     <style>
@@ -16,8 +16,8 @@
         .btn {
             margin-right: 20px;
         }
-        .info {
-            width: 5%;
+        .remove {
+            width: 10%;
         }
     </style>
 </head>
@@ -25,12 +25,7 @@
 <div th:insert="navigationBar :: navigationBar"></div>
 <div class="container">
     <div class="padding">
-        <h2 class="text-center">Products</h2>
-    </div>
-    <div sec:authorize="hasRole('ADMIN')" class="row padding" style="padding-left: 20px;">
-        <a class="btn btn-primary" role="button" th:href="@{'/products/form/'}">
-          Add product
-        </a>
+        <h2 class="text-center">My cart</h2>
     </div>
     <table class="table table-hover table-bordered">
         <thead class="thead-inverse">
@@ -39,17 +34,26 @@
             <th class="header" scope="col">Price</th>
             <th class="header" scope="col">Number of products available</th>
             <th class="header" scope="col">Product category</th>
-            <th class="header info" scope="col"></th>
+            <th class="header remove" scope="col"></th>
         </tr>
         </thead>
-        <tr th:each="product, stat : ${products}">
+        <tr th:each="product, stat : ${cart.products}">
             <td th:text="${product.name}"></td>
             <td th:text="${product.price}"></td>
             <td th:text="${product.numberOfProducts}"></td>
             <td th:text="${product.productType}"></td>
-            <td><a th:href="@{'/products/' + ${product.id}}">Info</a></td>
+            <td>
+                <form th:action="@{'/cart/' + ${cart.id} + '/' + ${product.id}}" th:method="PUT" style="margin-left: 10px;">
+                    <button class="btn btn-danger" onclick="if (!confirm('Are you sure you want to remove from cart?')) return false;" type="submit">Remove</button>
+                </form>
+            </td>
         </tr>
     </table>
+</div>
+<div class="container" style="padding-top: 15px;">
+    <form th:action="@{'/orders'}" th:method="POST" style="margin-left: 10px;">
+        <button class="btn btn-success" type="submit">Send order</button>
+    </form>
 </div>
 </body>
 </html>

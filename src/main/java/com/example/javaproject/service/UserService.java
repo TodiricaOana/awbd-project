@@ -4,27 +4,34 @@ import com.example.javaproject.dto.UserDto;
 import com.example.javaproject.exception.definition.EmailAlreadyUsedException;
 import com.example.javaproject.exception.definition.UserNotFoundException;
 import com.example.javaproject.mapper.UserMapper;
+import com.example.javaproject.model.security.Authority;
 import com.example.javaproject.model.security.User;
+import com.example.javaproject.repository.security.AuthorityRepository;
 import com.example.javaproject.repository.security.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.javaproject.service.security.JpaUserDetailsService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class UserService {
-    @Autowired
-    private UserMapper userMapper;
-
-    @Autowired
-    private UserRepository userRepository;
+    private final UserMapper userMapper;
+    private final JpaUserDetailsService jpaUserDetailsService;
+    private final UserRepository userRepository;
+    private final AuthorityRepository authorityRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public UserDto findUserById(Long id) {
         Optional<User> user =  userRepository.findById(id);
@@ -42,7 +49,9 @@ public class UserService {
 
     public void deleteUserById(Long id){
         User user = findById(id);
-
+        if (user.getEmail().equals(jpaUserDetailsService.getCurrentUser().getUsername())) {
+            SecurityContextHolder.clearContext();
+        }
         userRepository.delete(user);
     }
 
@@ -51,43 +60,37 @@ public class UserService {
         return user != null;
     }
 
-    private String encrypt(String password) throws NoSuchAlgorithmException {
-        MessageDigest m = MessageDigest.getInstance("MD5");
-        m.reset();
-        m.update(password.getBytes());
-        byte[] digest = m.digest();
-        BigInteger bigInt = new BigInteger(1,digest);
-        String hashtext = bigInt.toString(16);
-        while(hashtext.length() < 32 ){
-            hashtext = "0" + hashtext;
-        }
-        return hashtext;
+    public UserDto findUserByEmail(String email) {
+        User user = userRepository.findUserByEmail(email);
+        return userMapper.mapToDto(user);
     }
 
-    public UserDto createUser(UserDto userDto) throws EmailAlreadyUsedException, NoSuchAlgorithmException {
+    public UserDto createUser(UserDto userDto) throws EmailAlreadyUsedException {
         User user = userMapper.mapToEntity(userDto);
 
         if (checkIfEmailExists(user.getEmail())) {
             throw new EmailAlreadyUsedException("This email is already used");
         }
 
-        user.setPassword(encrypt(user.getPassword()));
+        Authority authority = authorityRepository.findByRole("ROLE_GUEST");
+        user.setAuthorities(Collections.singleton(authority));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         User savedUser = userRepository.save(user);
         return userMapper.mapToDto(savedUser);
     }
 
-    public List<UserDto> getAllUsers() {
-        List<User> users = userRepository.findAll();
-        List <UserDto> usersDTO = users.stream().map(user -> userMapper.mapToDto(user))
+    public Page<UserDto> getAllUsers(Pageable pageable) {
+        Page<User> users = userRepository.findAll(pageable);
+        List<UserDto> usersDTO = users.getContent().stream().map(user -> userMapper.mapToDto(user))
                 .collect(Collectors.toList());
-        return usersDTO;
+        return new PageImpl<>(usersDTO, pageable, users.getTotalElements());
     }
 
-    public UserDto updateUser(User user, Long id) throws NoSuchAlgorithmException {
-        findUserById(id);
+    public UserDto updateUser(User user, Long id)  {
+        findById(id);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setId(id);
-        user.setPassword(encrypt(user.getPassword()));
         return userMapper.mapToDto(userRepository.save(user));
     }
 }

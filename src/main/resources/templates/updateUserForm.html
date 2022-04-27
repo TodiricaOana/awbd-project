@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update profile</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css"/>
+    <script src="/webjars/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <style>
+        .padding{
+            padding-bottom: 10px;
+        }
+        .error-style {
+            color:darkred;
+            justify-content: center
+        }
+    </style>
+</head>
+<body>
+<div th:insert="navigationBar :: navigationBar"></div>
+<form th:object="${user}" th:action="@{'/users/' + *{id}}" th:method="PUT" enctype="multipart/form-data">
+    <input type="hidden" th:field="*{id}"/>
+    <div class="container" style="justify-content: center; padding-top: 20px; padding-bottom: 10px;">
+        <div class="panel panel-primary">
+            <div class="panel-heading" style="background-color:rgba(56,54,87,0.75); padding: 3px;">
+                <h1 class="panel-title text-center" style="color:white" >Update Profile</h1>
+            </div>
+            <div class="panel-body" style="padding: 20px; text-align: center">
+                <div class="row" style="justify-content: center">
+                    <div class="col-md-6">
+                        <div class="row padding">
+                            <label th:for="email" >Email:</label>
+                            <input type="text" class="form-control" th:field="*{email}"/>
+                        </div>
+
+                        <div class="row padding">
+                            <label th:for="password" >Password:</label>
+                            <input type="password" class="form-control" th:field="*{password}"/>
+                        </div>
+
+                        <div class="row padding">
+                            <label th:for="fullname" >Full name:</label>
+                            <input type="text" class="form-control" th:field="*{fullName}"/>
+                        </div>
+
+                        <div class="row padding">
+                            <label th:for="address" >Address:</label>
+                            <input type="text" class="form-control" th:field="*{address}"/>
+                        </div>
+
+                        <div class="row padding">
+                            <label th:for="phoneNumber" >Phone number:</label>
+                            <input type="text" pattern="[0-9]+" title="Only digits allowed!" class="form-control" th:field="*{phoneNumber}"/>
+                        </div>
+
+                        <div class="row padding">
+                            <label th:for="description" >Description:</label>
+                            <input type="text" class="form-control" th:field="*{otherInformation}"/>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row" style="padding: 30px 0px 10px 0px; justify-content: center">
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+                <label class="row error-style" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></label>
+                <label class="row error-style" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></label>
+                <label class="row error-style" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></label>
+                <label class="row error-style" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></label>
+                <label class="row error-style" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></label>
+            </div>
+        </div>
+    </div>
+</form>
+</body>
+</html>

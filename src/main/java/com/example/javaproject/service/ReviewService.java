@@ -1,13 +1,8 @@
 package com.example.javaproject.service;
 
-import com.example.javaproject.dto.CartDto;
-import com.example.javaproject.dto.OrderDto;
 import com.example.javaproject.dto.ReviewDto;
-import com.example.javaproject.exception.definition.CartNotFound;
-import com.example.javaproject.exception.definition.OrderNotFound;
 import com.example.javaproject.exception.definition.ProductNotFound;
 import com.example.javaproject.exception.definition.ReviewNotFound;
-import com.example.javaproject.mapper.ProductMapper;
 import com.example.javaproject.mapper.ReviewMapper;
 import com.example.javaproject.model.*;
 import com.example.javaproject.model.security.User;
@@ -66,11 +61,5 @@ public class ReviewService {
         List <ReviewDto> reviewDtos = reviews.stream().map(review -> reviewMapper.mapToDto(review))
                 .collect(Collectors.toList());
         return reviewDtos;
-    }
-
-    public ReviewDto updateReview(ReviewDto reviewDto, Long id) throws ReviewNotFound {
-        Review review = findById(id);
-        review.setText(reviewDto.getText());
-        return reviewMapper.mapToDto(reviewRepository.save(review));
     }
 }

@@ -12,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.security.NoSuchAlgorithmException;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -54,7 +51,7 @@ public class CartService {
         cartRepository.delete(cart);
     }
 
-    public CartDto addToCart(Long userId, Long productId) throws ProductNotFound, NoSuchAlgorithmException {
+    public CartDto addToCart(Long userId, Long productId) throws ProductNotFound {
         User user = userService.findById(userId);
         Product product = productService.findById(productId);
 
@@ -71,13 +68,6 @@ public class CartService {
 
         userService.updateUser(user, userId);
         return cartMapper.mapToDto(savedCart);
-    }
-
-    public List<CartDto> getAllCarts() {
-        List<Cart> carts = cartRepository.findAll();
-        List <CartDto> cartsDto = carts.stream().map(product -> cartMapper.mapToDto(product))
-                .collect(Collectors.toList());
-        return cartsDto;
     }
 
     public CartDto deleteProductFromCart(Long cartId, Long productId) throws ProductNotFound, CartNotFound {

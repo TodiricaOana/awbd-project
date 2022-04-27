@@ -120,23 +120,25 @@ class OrderServiceTest {
 
     @Test
     @DisplayName("Update order - works")
-    void update_works() throws ProductNotFound, OrderNotFound {
-        Order order = getOrder();
+    void update_works() throws OrderNotFound {
+        OrderDto orderDto = getOrderDto();
 
         Order orderFind = getOrder();
         Optional<Order> optionalOrder = Optional.of(orderFind);
 
         Order savedOrder = getOrder();
         savedOrder.setId(ORDER_ID);
+        savedOrder.setStatus(STATUS);
 
         OrderDto returnedOrderDTO = getOrderDto();
         returnedOrderDTO.setId(ORDER_ID);
+        returnedOrderDTO.setStatus(STATUS);
 
         when(orderRepository.findById(ORDER_ID)).thenReturn(optionalOrder);
-        when(orderRepository.save(order)).thenReturn(savedOrder);
+        when(orderRepository.save(optionalOrder.get())).thenReturn(savedOrder);
         when(orderMapper.mapToDto(savedOrder)).thenReturn(returnedOrderDTO);
 
-        OrderDto result = orderService.updateOrder(STATUS, ORDER_ID);
+        OrderDto result = orderService.updateOrder(orderDto, ORDER_ID);
 
         assertNotNull(result);
         assertEquals(returnedOrderDTO.getId(), result.getId());

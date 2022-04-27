@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css"/>
+    <script src="/webjars/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <style>
+        .container {
+            padding-top: 10px;
+        }
+        .padding {
+            padding-bottom: 10px;
+            padding-top: 10px;
+        }
+        .info {
+            width: 5%;
+        }
+    </style>
+</head>
+<body>
+<div th:insert="navigationBar :: navigationBar"></div>
+<div class="container">
+    <div class="padding">
+        <h2 class="text-center">Users</h2>
+    </div>
+    <table class="table table-hover table-bordered">
+        <thead class="thead-inverse">
+        <tr>
+            <th class="header" scope="col">Name</th>
+            <th class="header" scope="col">Email</th>
+            <th class="header" scope="col">Phone number</th>
+            <th class="header" scope="col">Address</th>
+            <th class="header" scope="col">Description</th>
+            <th class="header info" scope="col"></th>
+        </tr>
+        </thead>
+        <tr th:each="user, stat : ${usersPagination.getContent()}">
+            <td th:text="${user.fullName}"></td>
+            <td th:text="${user.email}"></td>
+            <td th:text="${user.phoneNumber}"></td>
+            <td th:text="${user.address}"></td>
+            <td th:text="${user.otherInformation}"></td>
+            <td><a th:href="@{'/users/' + ${user.id}}">Info</a></td>
+        </tr>
+    </table>
+    <div style="padding-right: 20px;" class="float-right row" th:if="${usersPagination.totalPages > 0}">
+        <a style="padding-right: 10px;" th:if="${usersPagination.number + 1 < usersPagination.totalPages}"
+           th:href="@{/users(size=${usersPagination.size}, page=${usersPagination.number + 2})}">
+            Next page
+        </a>
+        <p style="padding-right: 10px;" th:unless="${usersPagination.number + 1 < usersPagination.totalPages}">Next page</p>
+        <a th:if="${usersPagination.number != 0}"
+           th:href="@{/users(size=${usersPagination.size}, page=${usersPagination.number})}">
+            Previous page
+        </a>
+    </div>
+</div>
+</body>
+</html>

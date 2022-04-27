@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update order</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css"/>
+    <script src="/webjars/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <style>
+        .padding{
+            padding-bottom: 10px;
+        }
+        .error-style {
+            color:darkred;
+            justify-content: center
+        }
+    </style>
+</head>
+<body>
+<div th:insert="navigationBar :: navigationBar"></div>
+<form th:object="${order}" th:action="@{'/orders/' + *{id}}" th:method="PUT" enctype="multipart/form-data">
+    <input type="hidden" th:field="*{userId}"/>
+    <input type="hidden" th:field="*{id}"/>
+    <div class="container text-center" style="align-items: center; padding-top: 20px; padding-bottom: 10px;">
+        <div class="panel panel-primary" style="border-width: 1px; border-style: solid; border-color: rgb(127,130,131);">
+            <div class="panel-heading" style="background-color:rgba(56,54,87,0.75); padding: 3px;">
+                <h1 class="panel-title text-center" style="color:white">Update status</h1>
+            </div>
+            <div class="panel-body" style="padding: 20px 20px 20px 60px;">
+                <div class="row" style="justify-content: center">
+                    <div class="col-md-6">
+                        <div class="row padding">
+                            <label th:for="name">Status</label>
+                            <input type="text" class="form-control" th:field="*{status}"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="padding: 30px 0px 10px 0px; justify-content: center">
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+                <label class="row error-style" th:if="${#fields.hasErrors('status')}" th:errors="*{status}"></label>
+            </div>
+        </div>
+    </div>
+</form>
+</body>
+</html>

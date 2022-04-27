@@ -1,55 +1,58 @@
 package com.example.javaproject.controller;
 
 import com.example.javaproject.dto.CartDto;
+import com.example.javaproject.dto.UserDto;
 import com.example.javaproject.exception.definition.CartNotFound;
 import com.example.javaproject.exception.definition.ProductNotFound;
+import com.example.javaproject.model.security.User;
 import com.example.javaproject.service.CartService;
+import com.example.javaproject.service.UserService;
+import com.example.javaproject.service.security.JpaUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.Banner;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/cart")
+@Controller
+@RequestMapping("/cart")
 public class CartController {
 
     @Autowired
     private CartService cartService;
 
-    @PostMapping("/{userId}/{productId}")
-    public ResponseEntity<CartDto> addToCart(@PathVariable Long userId, @PathVariable Long productId) throws ProductNotFound, NoSuchAlgorithmException {
-        return ResponseEntity
-                .ok()
-                .body(cartService.addToCart(userId, productId));
+    @Autowired
+    private JpaUserDetailsService jpaUserDetailsService;
+
+    @Autowired
+    private UserService userService;
+
+    @PostMapping("/{productId}")
+    public String addToCart(@PathVariable Long productId) throws ProductNotFound {
+
+        String username = jpaUserDetailsService.getCurrentUser().getUsername();
+        UserDto user =  userService.findUserByEmail(username);
+        cartService.addToCart(user.getId(), productId);
+
+        return "redirect:/cart";
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<CartDto> getCartByUser(@PathVariable Long userId) throws CartNotFound {
-        return ResponseEntity
-                .ok()
-                .body(cartService.findCartByUser(userId));
+    @GetMapping
+    public String getCurrentCartByUser(Model model) throws CartNotFound {
+        String username = jpaUserDetailsService.getCurrentUser().getUsername();
+        UserDto user =  userService.findUserByEmail(username);
+        model.addAttribute("cart", cartService.findCartByUser(user.getId()));
+        return ("cart");
     }
 
     @PutMapping("/{cartId}/{productId}")
-    public ResponseEntity<CartDto> deleteProductFromCart(@PathVariable Long cartId, @PathVariable Long productId) throws ProductNotFound, CartNotFound {
-        return ResponseEntity
-                .ok()
-                .body(cartService.deleteProductFromCart(cartId, productId));
-    }
-
-    @DeleteMapping("/{userId}")
-    public ResponseEntity<CartDto> deleteCartByUserId(@PathVariable Long userId) throws CartNotFound {
-        cartService.deleteCartByUserId(userId);
-        return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("/all")
-    public ResponseEntity<List<CartDto>> get() {
-        return ResponseEntity
-                .ok()
-                .body(cartService.getAllCarts());
+    public String deleteProductFromCart(@PathVariable Long cartId, @PathVariable Long productId) throws ProductNotFound, CartNotFound {
+       cartService.deleteProductFromCart(cartId, productId);
+       return "redirect:/cart";
     }
 }

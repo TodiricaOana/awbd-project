@@ -1,12 +1,15 @@
 package com.example.javaproject.service.security;
 
+import com.example.javaproject.exception.definition.InternalServerErrorException;
 import com.example.javaproject.model.security.Authority;
 import com.example.javaproject.model.security.User;
 import com.example.javaproject.repository.security.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.api.ErrorMessage;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -56,4 +59,9 @@ public class JpaUserDetailsService implements UserDetailsService {
                     .collect(Collectors.toSet());
         }
     }
+
+    public UserDetails getCurrentUser() {
+        return (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
 }

@@ -39,16 +39,6 @@ public class OrderService {
     @Autowired
     private ProductService productService;
 
-
-    public List<OrderDto> findOrdersByUser(Long userId) throws OrderNotFound {
-        List<Order> orders =  orderRepository.findOrdersByUserId(userId);
-        if (orders == null)
-            throw new OrderNotFound("Orders not found");
-        List <OrderDto> ordersDto = orders.stream().map(order -> orderMapper.mapToDto(order))
-                .collect(Collectors.toList());
-        return ordersDto;
-    }
-
     public Order findById(Long id) throws OrderNotFound {
         Optional<Order> order =  orderRepository.findById(id);
         if (order.isEmpty())
@@ -101,9 +91,10 @@ public class OrderService {
         return ordersDto;
     }
 
-    public OrderDto updateOrder(String status, Long id) throws OrderNotFound {
+    public OrderDto updateOrder(OrderDto orderDto, Long id) throws OrderNotFound {
         Order order = findById(id);
-        order.setStatus(status);
+        order.setId(id);
+        order.setStatus(orderDto.getStatus());
         return orderMapper.mapToDto(orderRepository.save(order));
     }
 
